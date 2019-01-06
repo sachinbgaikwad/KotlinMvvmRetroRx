@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/dimen_8">
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/txtTitle"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/font_16"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dimen_10"
+                app:layout_constraintStart_toStartOf="@id/guideLineStart16"
+                app:layout_constraintEnd_toEndOf="@id/guideLineEnd16"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/txtDesc"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/font_16"
+                android:visibility="gone"
+                android:textColor="@color/colorPrimaryText"
+                android:textStyle="normal"
+                android:gravity="start"
+                android:maxLines="4"
+                android:minLines="4"
+                android:ellipsize="end"
+                android:paddingBottom="@dimen/dimen_10"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:layout_marginRight="@dimen/dimen_10"
+                app:layout_constraintStart_toStartOf="@id/guideLineStart16"
+                app:layout_constraintEnd_toStartOf="@id/imgPoster"
+                app:layout_constraintTop_toBottomOf="@id/txtTitle"/>
+
+        <ImageView
+                android:layout_width="@dimen/dimen_100"
+                android:layout_height="@dimen/dimen_80"
+                android:id="@+id/imgPoster"
+                app:layout_constraintStart_toEndOf="@id/txtDesc"
+                app:layout_constraintEnd_toStartOf="@id/nxt"
+                app:layout_constraintTop_toTopOf="@id/txtDesc"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_next"
+                android:id="@+id/nxt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/txtDesc"/>
+
+        <android.support.constraint.Guideline
+                android:id="@+id/guideLineStart16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/dimen_10"/>
+
+        <android.support.constraint.Guideline
+                android:id="@+id/guideLineEnd16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/dimen_10"/>
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
