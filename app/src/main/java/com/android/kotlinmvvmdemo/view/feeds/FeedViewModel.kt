@@ -9,7 +9,7 @@ import io.reactivex.Observable
  */
 class FeedViewModel : BaseViewModel() {
 
-    fun getFeeds(): Observable<FeedResponse> {
-        return appDataManager.getFeeds()
+    fun getFeeds(): Observable<FeedResponse>? {
+        return appDataManager?.getFeeds()
     }
 }

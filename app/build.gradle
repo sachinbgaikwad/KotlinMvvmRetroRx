@@ -68,6 +68,5 @@ dependencies {
 
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-//    testImplementation 'com.nhaarman:mockito-kotlin:1.1.0'
     testImplementation 'org.mockito:mockito-inline:2.8.9'
 }

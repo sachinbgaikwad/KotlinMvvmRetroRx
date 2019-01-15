@@ -22,39 +22,38 @@ import okhttp3.OkHttpClient
 class AppApiManager : ApiManager {
 
     private var feedApi: FeedApi
-    private var retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .client(getClient())
-        .baseUrl(BuildConfig.BASE_URL)
-        .build()
+    private var retrofit: Retrofit
 
-    private fun getClient(): OkHttpClient {
+    private fun getClient(mContext: Context?): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder()
-//        okHttpClientBuilder.addInterceptor(ConnectivityInterceptor(context))
+        okHttpClientBuilder.addInterceptor(ConnectivityInterceptor(mContext))
         return okHttpClientBuilder.build()
     }
 
-    override fun getFeeds(): Observable<FeedResponse> {
-        return feedApi.getFeeds()
-            .doOnNext {
-                Log.d("FeedApi", it.toString())
-            }
+    override fun getFeeds(): Observable<FeedResponse>? {
+        return feedApi.getFeeds()?.doOnNext {
+            Log.d("FeedApi", it.toString())
+        }
     }
 
-
-    private constructor() {
+    private constructor(mContext: Context?) {
+        retrofit = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(getClient(mContext))
+            .baseUrl(BuildConfig.BASE_URL)
+            .build()
         feedApi = retrofit.create(FeedApi::class.java)
     }
 
     companion object {
         private var instance: AppApiManager? = null
 
-        fun getInstance(): AppApiManager? {
+        fun getInstance(mContext : Context?): AppApiManager? {
             if (instance == null) {
                 synchronized(AppDataManager::class.java) {
                     if (instance == null) {
-                        instance = AppApiManager()
+                        instance = AppApiManager(mContext)
                     }
                 }
             }

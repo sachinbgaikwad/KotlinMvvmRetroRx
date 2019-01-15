@@ -17,8 +17,8 @@ class KotlinMVVMDemoApp : Application() {
         super.onCreate()
         AppDataManager.getInstance(
             applicationContext,
-            AppPreferenceManager.getInstance(applicationContext, PREF_NAME)!!,
-            AppApiManager.getInstance()
+            AppPreferenceManager.getInstance(applicationContext, PREF_NAME),
+            AppApiManager.getInstance(applicationContext)
         )
     }
 

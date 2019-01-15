@@ -8,5 +8,5 @@ import io.reactivex.Observable
  */
 interface ApiManager {
 
-    fun getFeeds(): Observable<FeedResponse>
+    fun getFeeds(): Observable<FeedResponse>?
 }

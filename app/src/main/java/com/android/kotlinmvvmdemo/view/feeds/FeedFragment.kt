@@ -1,4 +1,4 @@
-package com.android.kotlinmvvmdemo.view.feeds
+package com .android.kotlinmvvmdemo.view.feeds
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -68,41 +68,40 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         Toast.makeText(context, "An error occurred :(", Toast.LENGTH_SHORT).show()
     }
 
-    private fun showError(errorMessage: String) {
+    private fun showError(errorMessage: String?) {
         Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
     }
 
     private fun showFeeds(it: FeedResponse?) {
-        activity!!.title = it!!.title
-        if (it.rows != null)
-            if (!it.rows.isEmpty()) {
-                mItems.clear()
-                for (row in it.rows) {
-                    if (row.title == null && row.imageHref == null && row.description == null) {
-                    } else {
-                        mItems.add(row)
-                    }
-                }
-//                mItems.addAll(it.rows)
-                mFeedsAdapter.notifyDataSetChanged()
-            }
+        activity?.title = it?.title
+//        if (it?.rows ?: != null)
+//            if (!it.rows.isEmpty()) {
+//                mItems.clear()
+//                for (row in it?.rows!!) {
+//                    if (row.title == null && row.imageHref == null && row.description == null) {
+//                    } else {
+//                        mItems.add(row)
+//                    }
+//                }
+////                mItems.addAll(it.rows)
+//                mFeedsAdapter.notifyDataSetChanged()
+//            }
+        mItems.addAll(it!!.rows)
+        mFeedsAdapter.notifyDataSetChanged()
     }
 
     private fun fetchData() {
         mSwipeRefreshLayout.isRefreshing = true
         subscribe(
-            feedViewModel.getFeeds()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    mSwipeRefreshLayout.isRefreshing = false
-                    Log.d("FeedFragment", it.toString())
-                    showFeeds(it)
-                }, {
-                    showError(it.message!!)
-                    mSwipeRefreshLayout.isRefreshing = false
-                    Log.d("FeedFragment", it.toString())
-                })
+            feedViewModel.getFeeds()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe({
+                mSwipeRefreshLayout.isRefreshing = false
+                Log.d("FeedFragment", it.toString())
+                showFeeds(it)
+            }, {
+                showError(it.message)
+                mSwipeRefreshLayout.isRefreshing = false
+                Log.d("FeedFragment", it.toString())
+            })
         )
     }
 

@@ -10,8 +10,8 @@ import io.reactivex.disposables.Disposable
 open class BaseFragment : Fragment() {
     val subscriptions = CompositeDisposable()
 
-    fun subscribe(disposable: Disposable): Disposable {
-        subscriptions.add(disposable)
+    fun subscribe(disposable: Disposable?): Disposable? {
+        disposable?.let { subscriptions.add(it) }
         return disposable
     }
 

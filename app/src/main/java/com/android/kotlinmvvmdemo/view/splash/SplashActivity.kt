@@ -29,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
 
     public override fun onDestroy() {
         if (mDelayHandler != null) {
-            mDelayHandler!!.removeCallbacks(mSplashRunnable)
+            mDelayHandler?.removeCallbacks(mSplashRunnable)
         }
         super.onDestroy()
     }

@@ -10,5 +10,5 @@ import io.reactivex.Observable
 interface FeedApi {
 
     @GET("/s/2iodh4vg0eortkl/facts.json")
-    fun getFeeds(): Observable<FeedResponse>
+    fun getFeeds(): Observable<FeedResponse>?
 }

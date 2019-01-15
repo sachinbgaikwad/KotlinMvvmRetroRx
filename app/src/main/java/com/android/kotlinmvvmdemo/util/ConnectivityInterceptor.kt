@@ -7,9 +7,9 @@ import okhttp3.Response
 /**
  * Created by Sachin G. on 6/1/19.
  */
-class ConnectivityInterceptor(private val mContext: Context) : Interceptor {
+class ConnectivityInterceptor(private val mContext: Context?) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        if (!Utils.isNetworkAvailable(mContext.applicationContext)) {
+        if (!Utils.isNetworkAvailable(mContext?.applicationContext)) {
             throw NoConnectivityException("Please check your WIFI or data connection.")
         }
         val builder = chain.request().newBuilder()

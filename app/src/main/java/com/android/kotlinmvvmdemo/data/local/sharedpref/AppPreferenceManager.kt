@@ -11,24 +11,24 @@ import com.android.kotlinmvvmdemo.util.Constants.Companion.IS_FIRST_TIME_INSTALL
  */
 class AppPreferenceManager : PreferenceManager {
 
-    private var preferences: SharedPreferences? = null
+    private var preferences: SharedPreferences
 
     private constructor(mContext: Context, prefFileName: String) {
         preferences = mContext.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
     }
 
     override fun clearAllValues() {
-        val editor = preferences!!.edit()
+        val editor = preferences.edit()
         editor.clear()
         editor.commit()
     }
 
     override fun isFirstTimeInstalled(): Boolean {
-        return preferences!!.getBoolean(IS_FIRST_TIME_INSTALLED, true)
+        return preferences.getBoolean(IS_FIRST_TIME_INSTALLED, true)
     }
 
     override fun persistInstall() {
-        val isSuccess = preferences!!.edit().putBoolean(IS_FIRST_TIME_INSTALLED, false).commit()
+        val isSuccess = preferences.edit().putBoolean(IS_FIRST_TIME_INSTALLED, false).commit()
         if (BuildConfig.DEBUG) {
             Log.d(IS_FIRST_TIME_INSTALLED, IS_FIRST_TIME_INSTALLED + " : " + isSuccess.toString())
         }

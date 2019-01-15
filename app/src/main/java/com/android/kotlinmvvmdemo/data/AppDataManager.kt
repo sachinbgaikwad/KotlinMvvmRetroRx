@@ -16,8 +16,8 @@ class AppDataManager : DataManager {
     private var preferenceManager: PreferenceManager? = null
     private var apiManager: ApiManager? = null
 
-    private constructor(context: Context, preferenceManager: AppPreferenceManager, apiManager: ApiManager?) {
-        this.context = context.applicationContext
+    private constructor(context: Context?, preferenceManager: AppPreferenceManager?, apiManager: ApiManager?) {
+        this.context = context?.applicationContext
         this.preferenceManager = preferenceManager
         this.apiManager = apiManager
     }
@@ -26,22 +26,22 @@ class AppDataManager : DataManager {
      * Shared Preferences related methods implementation are here
      * */
     override fun clearAllValues() {
-        preferenceManager!!.clearAllValues()
+        preferenceManager?.clearAllValues()
     }
 
-    override fun isFirstTimeInstalled(): Boolean {
-        return preferenceManager!!.isFirstTimeInstalled()
+    override fun isFirstTimeInstalled(): Boolean? {
+        return preferenceManager?.isFirstTimeInstalled()
     }
 
     override fun persistInstall() {
-        preferenceManager!!.persistInstall()
+        preferenceManager?.persistInstall()
     }
 
     /**
      * Feeds data gets from API
      * */
-    override fun getFeeds(): Observable<FeedResponse> {
-        return apiManager!!.getFeeds()
+    override fun getFeeds(): Observable<FeedResponse>? {
+        return apiManager?.getFeeds()
     }
 
     /**
@@ -52,8 +52,8 @@ class AppDataManager : DataManager {
         private var instance: AppDataManager? = null
 
         fun getInstance(
-            context: Context,
-            preferenceManager: AppPreferenceManager,
+            context: Context?,
+            preferenceManager: AppPreferenceManager?,
             apiManager: ApiManager?
         ): AppDataManager? {
             if (instance == null) {

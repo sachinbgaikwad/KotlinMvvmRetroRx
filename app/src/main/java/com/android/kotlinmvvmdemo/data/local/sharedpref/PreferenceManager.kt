@@ -6,7 +6,7 @@ package com.android.kotlinmvvmdemo.data.local
 interface PreferenceManager {
     fun clearAllValues()
 
-    fun isFirstTimeInstalled(): Boolean
+    fun isFirstTimeInstalled(): Boolean?
 
     fun persistInstall()
 }

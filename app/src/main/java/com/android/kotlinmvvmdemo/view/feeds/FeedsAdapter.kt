@@ -32,17 +32,17 @@ class FeedsAdapter(private val items: MutableList<Row>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (items[position].title != null) {
-            holder.mTitle!!.visibility = VISIBLE
-            holder.mTitle!!.text = items[position].title
+            holder.mTitle?.visibility = VISIBLE
+            holder.mTitle?.text = items[position].title
         } else {
-            holder.mTitle!!.visibility = GONE
+            holder.mTitle?.visibility = GONE
         }
 
         if (items[position].description != null) {
-            holder.mDesc!!.visibility = VISIBLE
-            holder.mDesc!!.text = items[position].description
+            holder.mDesc?.visibility = VISIBLE
+            holder.mDesc?.text = items[position].description
         } else {
-            holder.mDesc!!.visibility = GONE
+            holder.mDesc?.visibility = GONE
         }
 
         var requestOptions = RequestOptions()
@@ -53,15 +53,17 @@ class FeedsAdapter(private val items: MutableList<Row>) :
 //        requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(12))
 
         if (items[position].imageHref != null) {
-            holder.mImagePoster!!.visibility = VISIBLE
-            holder.mNxt!!.visibility = VISIBLE
-            Glide.with(holder.itemView.context)
-                .load(items[position].imageHref)
-                .apply(RequestOptions.centerCropTransform())
-                .into(holder.mImagePoster!!)
+            holder.mImagePoster?.visibility = VISIBLE
+            holder.mNxt?.visibility = VISIBLE
+            holder.mImagePoster?.let {
+                Glide.with(it.context)
+                    .load(items[position].imageHref)
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(it)
+            }
         } else {
-            holder.mImagePoster!!.visibility = GONE
-            holder.mNxt!!.visibility = GONE
+            holder.mImagePoster?.visibility = GONE
+            holder.mNxt?.visibility = GONE
         }
     }
 
