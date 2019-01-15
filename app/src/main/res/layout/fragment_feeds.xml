@@ -14,4 +14,13 @@
             android:layout_marginLeft="@dimen/dimen_16"
             android:layout_marginRight="@dimen/dimen_16"/>
 
+    <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/font_20"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 </android.support.v4.widget.SwipeRefreshLayout>

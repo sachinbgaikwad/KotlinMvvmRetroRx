@@ -1,4 +1,4 @@
-package com .android.kotlinmvvmdemo.view.feeds
+package com.android.kotlinmvvmdemo.view.feeds
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -12,19 +12,20 @@ import com.android.kotlinmvvmdemo.R
 import com.android.kotlinmvvmdemo.base.BaseFragment
 import com.android.kotlinmvvmdemo.data.model.FeedResponse
 import com.android.kotlinmvvmdemo.data.model.Row
-import com.android.kotlinmvvmdemo.util.getViewModel
+import com.android.kotlinmvvmdemo.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_feeds.*
-import com.android.kotlinmvvmdemo.util.GridSpacingItemDecoration
-import com.android.kotlinmvvmdemo.util.NoConnectivityException
-import retrofit2.Retrofit
 
 
 /**
  * Created by Sachin G. on 6/1/19.
  */
-class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
+class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
+
+    override fun onItemClicked(position: Int, view: View) {
+        Toast.makeText(activity, "Item selected : $position", Toast.LENGTH_SHORT).show()
+    }
 
     private lateinit var mFeedsAdapter: FeedsAdapter
     private val mItems: MutableList<Row> = mutableListOf()
@@ -61,6 +62,7 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
         rvFeeds.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         rvFeeds.addItemDecoration(GridSpacingItemDecoration(1, 20, true, 0))
         rvFeeds.adapter = mFeedsAdapter
+        rvFeeds.addOnItemClickListener(this)
         fetchData()
     }
 
@@ -86,22 +88,29 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 ////                mItems.addAll(it.rows)
 //                mFeedsAdapter.notifyDataSetChanged()
 //            }
+        mItems.clear()
         mItems.addAll(it!!.rows)
+        if (mItems.isEmpty())
+            tvError.visible()
+        else
+            tvError.gone()
         mFeedsAdapter.notifyDataSetChanged()
     }
 
     private fun fetchData() {
         mSwipeRefreshLayout.isRefreshing = true
         subscribe(
-            feedViewModel.getFeeds()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe({
-                mSwipeRefreshLayout.isRefreshing = false
-                Log.d("FeedFragment", it.toString())
-                showFeeds(it)
-            }, {
-                showError(it.message)
-                mSwipeRefreshLayout.isRefreshing = false
-                Log.d("FeedFragment", it.toString())
-            })
+            feedViewModel.getFeeds()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
+                {
+                    mSwipeRefreshLayout.isRefreshing = false
+                    Log.d("FeedFragment", it.toString())
+                    showFeeds(it)
+                },
+                {
+                    showError(it.message)
+                    mSwipeRefreshLayout.isRefreshing = false
+                    Log.d("FeedFragment", it.toString())
+                })
         )
     }
 
