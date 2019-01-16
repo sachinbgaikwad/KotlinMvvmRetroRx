@@ -1,22 +1,31 @@
 package com.android.kotlinmvvmdemo.base
 
+import android.arch.lifecycle.Observer
+import android.os.Bundle
 import android.support.v4.app.Fragment
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import android.widget.Toast
+import com.android.kotlinmvvmdemo.util.getViewModel
 
 /**
  * Created by Sachin G. on 6/1/19.
  */
-open class BaseFragment : Fragment() {
-    val subscriptions = CompositeDisposable()
+abstract class BaseFragment : Fragment() {
 
-    fun subscribe(disposable: Disposable?): Disposable? {
-        disposable?.let { subscriptions.add(it) }
-        return disposable
+    private val baseViewModel: BaseViewModel by lazy {
+        getViewModel { BaseViewModel() }
     }
 
-    override fun onStop() {
-        super.onStop()
-        subscriptions.clear()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        baseViewModel.errorLiveData.observe(this, Observer {
+            showError(it)
+        })
     }
+
+    abstract fun showError(error: String?)
+
+    fun showToast(error: String?) {
+        Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
+    }
+
 }

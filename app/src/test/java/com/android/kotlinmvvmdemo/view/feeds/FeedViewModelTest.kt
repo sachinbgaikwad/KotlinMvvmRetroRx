@@ -1,9 +1,5 @@
 package com.android.kotlinmvvmdemo.view.feeds
 
-import com.android.kotlinmvvmdemo.data.model.FeedResponse
-import com.android.kotlinmvvmdemo.data.model.Row
-import io.reactivex.Observable
-import io.reactivex.Observer
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -23,15 +19,8 @@ class FeedViewModelTest {
     }
 
     @Test
-    fun getFeeds() {
-        Mockito.`when`(feedViewModel!!.getFeeds()).then {
-            Observable.just(FeedResponse(emptyList(), "Kotlin Mockito Test"))
-        }
-        feedViewModel!!.getFeeds().test().assertValue {
-            it.title.isEmpty()
-            it.rows.isEmpty()
-            it.title == "Kotlin Mockito Test"
-        }
+    fun getMutableLiveData() {
+        Assert.assertNotNull(feedViewModel?.responseLiveData)
     }
 
     @After

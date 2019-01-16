@@ -16,13 +16,4 @@ open class BaseActivity : AppCompatActivity() {
         ft.replace(mContainer, fragment, tag)
         ft.commitAllowingStateLoss()
     }
-
-    fun replaceFragment(mContainer: Int, fragment: Fragment, addToBackStack: Boolean, tag: String) {
-        val ft = supportFragmentManager.beginTransaction()
-        if (addToBackStack) {
-            ft.addToBackStack(tag)
-        }
-        ft.add(mContainer, fragment, tag)
-        ft.commitAllowingStateLoss()
-    }
 }

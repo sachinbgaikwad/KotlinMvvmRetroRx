@@ -1,20 +1,17 @@
 package com.android.kotlinmvvmdemo.view.feeds
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.android.kotlinmvvmdemo.R
 import com.android.kotlinmvvmdemo.base.BaseFragment
 import com.android.kotlinmvvmdemo.data.model.FeedResponse
 import com.android.kotlinmvvmdemo.data.model.Row
 import com.android.kotlinmvvmdemo.util.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_feeds.*
 
 
@@ -22,10 +19,6 @@ import kotlinx.android.synthetic.main.fragment_feeds.*
  * Created by Sachin G. on 6/1/19.
  */
 class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
-
-    override fun onItemClicked(position: Int, view: View) {
-        Toast.makeText(activity, "Item selected : $position", Toast.LENGTH_SHORT).show()
-    }
 
     private lateinit var mFeedsAdapter: FeedsAdapter
     private val mItems: MutableList<Row> = mutableListOf()
@@ -41,14 +34,28 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnIte
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_feeds, container, false)
+        return inflater.inflate(com.android.kotlinmvvmdemo.R.layout.fragment_feeds, container, false)
     }
 
     override fun onStart() {
         super.onStart()
         init()
+        initObserver()
     }
 
+    private fun initObserver() {
+        feedViewModel.responseLiveData?.observe(this, feedObserver())
+    }
+
+    private fun feedObserver(): Observer<FeedResponse> {
+        return Observer {
+            showFeeds(it)
+        }
+    }
+
+    /**
+     * Init UI related component
+     * */
     private fun init() {
         mFeedsAdapter = FeedsAdapter(mItems)
         mSwipeRefreshLayout.setColorSchemeResources(
@@ -66,28 +73,24 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnIte
         fetchData()
     }
 
-    private fun showError() {
-        Toast.makeText(context, "An error occurred :(", Toast.LENGTH_SHORT).show()
+    /**
+     * Error messages are shown like empty list
+     * */
+    override fun showError(errorMessage: String?) {
+        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
+        tvError.text = errorMessage
+        if (mItems.isEmpty())
+            tvError.visible()
+        else
+            tvError.gone()
     }
 
-    private fun showError(errorMessage: String?) {
-        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-    }
-
+    /**
+     * show data to UI
+     * */
     private fun showFeeds(it: FeedResponse?) {
+        mSwipeRefreshLayout.isRefreshing = false
         activity?.title = it?.title
-//        if (it?.rows ?: != null)
-//            if (!it.rows.isEmpty()) {
-//                mItems.clear()
-//                for (row in it?.rows!!) {
-//                    if (row.title == null && row.imageHref == null && row.description == null) {
-//                    } else {
-//                        mItems.add(row)
-//                    }
-//                }
-////                mItems.addAll(it.rows)
-//                mFeedsAdapter.notifyDataSetChanged()
-//            }
         mItems.clear()
         mItems.addAll(it!!.rows)
         if (mItems.isEmpty())
@@ -99,22 +102,20 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnIte
 
     private fun fetchData() {
         mSwipeRefreshLayout.isRefreshing = true
-        subscribe(
-            feedViewModel.getFeeds()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
-                {
-                    mSwipeRefreshLayout.isRefreshing = false
-                    Log.d("FeedFragment", it.toString())
-                    showFeeds(it)
-                },
-                {
-                    showError(it.message)
-                    mSwipeRefreshLayout.isRefreshing = false
-                    Log.d("FeedFragment", it.toString())
-                })
-        )
+        feedViewModel.getFeeds()
     }
 
+    /**
+     * This method is called when PullToRefresh called
+     * */
     override fun onRefresh() {
         fetchData()
+    }
+
+    /**
+     * OnItemClick of RecyclerView
+     * */
+    override fun onItemClicked(position: Int, view: View) {
+        showToast("Item selected : $position")
     }
 }
