@@ -35,7 +35,7 @@ class FeedViewModel(application: Application) : BaseViewModel(application) {
         )
     }
 
-    private fun processData(rows: List<Row>): List<Row> {
+    internal fun processData(rows: List<Row>): List<Row> {
         return rows.filter {
             !it.title.isNullOrEmpty() &&
                     !it.description.isNullOrEmpty() &&
