@@ -1,17 +1,21 @@
 package com.android.kotlinmvvmdemo.view.feeds
 
+import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import com.android.kotlinmvvmdemo.R
 import com.android.kotlinmvvmdemo.base.BaseViewModel
 import com.android.kotlinmvvmdemo.data.model.FeedResponse
 import com.android.kotlinmvvmdemo.data.model.Row
+import com.android.kotlinmvvmdemo.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Sachin G. on 6/1/19.
  */
-class FeedViewModel : BaseViewModel() {
+class FeedViewModel(application: Application) : BaseViewModel(application) {
 
+    var app: Application = application
     internal var responseLiveData: MutableLiveData<FeedResponse>? = MutableLiveData()
 
     fun getFeeds() {
@@ -23,12 +27,15 @@ class FeedViewModel : BaseViewModel() {
                     processData(it.rows)
                     responseLiveData?.postValue(it)
                 }, {
-                    errorLiveData.postValue(it.message)
+                    if (Utils.isNetworkAvailable(app))
+                        errorLiveData.postValue(it.message)
+                    else
+                        errorLiveData.postValue(app.getString(R.string.network_error))
                 })
         )
     }
 
-    fun processData(rows: List<Row>): List<Row> {
+    private fun processData(rows: List<Row>): List<Row> {
         return rows.filter {
             !it.title.isNullOrEmpty() &&
                     !it.description.isNullOrEmpty() &&

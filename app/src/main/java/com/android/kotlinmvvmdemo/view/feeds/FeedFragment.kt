@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.android.kotlinmvvmdemo.base.BaseFragment
 import com.android.kotlinmvvmdemo.data.model.FeedResponse
 import com.android.kotlinmvvmdemo.data.model.Row
@@ -30,7 +29,7 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnIte
     }
 
     private val feedViewModel: FeedViewModel by lazy {
-        getViewModel { FeedViewModel() }
+        getViewModel { FeedViewModel(activity!!.application) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,6 +44,10 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnIte
 
     private fun initObserver() {
         feedViewModel.responseLiveData?.observe(this, feedObserver())
+
+        feedViewModel.errorLiveData.observe(this, Observer {
+            showError(it)
+        })
     }
 
     private fun feedObserver(): Observer<FeedResponse> {
@@ -77,7 +80,10 @@ class FeedFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener, OnIte
      * Error messages are shown like empty list
      * */
     override fun showError(errorMessage: String?) {
-        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
+        if (mSwipeRefreshLayout.isRefreshing)
+            mSwipeRefreshLayout.isRefreshing = false
+
+//        showToast(errorMessage)
         tvError.text = errorMessage
         if (mItems.isEmpty())
             tvError.visible()

@@ -5,22 +5,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvFeeds"
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/dimen_16"
-            android:layout_marginRight="@dimen/dimen_16"/>
+            android:layout_height="match_parent">
 
-    <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tvError"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/no_data"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/font_20"
-            android:textStyle="bold"
-            android:visibility="gone"/>
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvFeeds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/dimen_16"
+                android:layout_marginRight="@dimen/dimen_16"/>
+
+        <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tvError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no_data"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/font_20"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"/>
+    </FrameLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
