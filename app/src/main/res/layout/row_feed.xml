@@ -16,6 +16,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textSize="@dimen/font_16"
+                android:justificationMode="inter_word"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 android:layout_marginTop="@dimen/dimen_10"
@@ -28,12 +29,12 @@
                 android:layout_width="@dimen/dimen_0"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:justificationMode="inter_word"
                 android:textSize="@dimen/font_16"
                 android:visibility="gone"
                 android:textColor="@color/colorPrimaryText"
                 android:textStyle="normal"
                 android:gravity="start"
-                android:maxLines="4"
                 android:minLines="4"
                 android:ellipsize="end"
                 android:paddingBottom="@dimen/dimen_10"
@@ -50,6 +51,17 @@
                 app:layout_constraintStart_toEndOf="@id/txtDesc"
                 app:layout_constraintEnd_toStartOf="@id/nxt"
                 app:layout_constraintTop_toTopOf="@id/txtDesc"/>
+
+        <ProgressBar
+                android:id="@+id/progress_circular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                style="?android:attr/progressBarStyleSmall"
+                app:layout_constraintStart_toStartOf="@id/imgPoster"
+                app:layout_constraintEnd_toEndOf="@id/imgPoster"
+                app:layout_constraintTop_toTopOf="@id/imgPoster"
+                app:layout_constraintBottom_toBottomOf="@id/imgPoster"/>
 
         <ImageView
                 android:layout_width="wrap_content"

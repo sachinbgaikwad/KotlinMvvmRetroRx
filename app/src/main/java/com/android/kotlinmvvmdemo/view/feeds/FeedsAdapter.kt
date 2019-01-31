@@ -1,7 +1,6 @@
 package com.android.kotlinmvvmdemo.view.feeds
 
-import android.graphics.Bitmap
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,14 +9,18 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.android.kotlinmvvmdemo.R
 import com.android.kotlinmvvmdemo.data.model.Row
+import com.android.kotlinmvvmdemo.util.gone
+import com.android.kotlinmvvmdemo.util.invisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.BitmapImageViewTarget
 
 
 /**
@@ -46,8 +49,8 @@ class FeedsAdapter(private val items: MutableList<Row>) :
         }
 
         var requestOptions = RequestOptions()
-        requestOptions.placeholder(R.drawable.ic_placeholder)
-            .error(R.drawable.ic_error)
+        requestOptions.placeholder(R.drawable.error_robot)
+            .error(R.drawable.error_robot)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .priority(Priority.HIGH)
 //        requestOptions = requestOptions.transforms(CenterCrop(), RoundedCorners(12))
@@ -59,6 +62,29 @@ class FeedsAdapter(private val items: MutableList<Row>) :
                 Glide.with(it.context)
                     .load(items[position].imageHref)
                     .apply(RequestOptions.centerCropTransform())
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            holder.mProgressBar?.invisible()
+                            return false
+                        }
+
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            holder.mImagePoster?.invisible()
+                            holder.mProgressBar?.invisible()
+                            return false
+                        }
+                    })
                     .into(it)
             }
         } else {
@@ -88,5 +114,10 @@ class FeedsAdapter(private val items: MutableList<Row>) :
         internal val mDesc: AppCompatTextView? by lazy {
             itemView.findViewById(R.id.txtDesc) as AppCompatTextView?
         }
+
+        internal val mProgressBar: ProgressBar? by lazy {
+            itemView.findViewById(R.id.progress_circular) as ProgressBar?
+        }
+
     }
 }
